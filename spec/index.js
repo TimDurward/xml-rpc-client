@@ -59,7 +59,7 @@ const ArrayTypeSchema = Joi.object({
  *
  * */
 
-const MethodCallSchema = Joi.object({
+const XMLRPCSchema = Joi.object({
   methodCall: Joi.array()
     .items(
       Joi.object({
@@ -72,7 +72,9 @@ const MethodCallSchema = Joi.object({
               .items(
                 Joi.object({
                   value: Joi.array()
-                    .items(StructTypeSchema, ArrayTypeSchema)
+                  // replace Joi.any() with valid Scalar types
+                  // http://xmlrpc.com/spec.md#a-namescalarsscalar-valuesa
+                    .items(StructTypeSchema, ArrayTypeSchema, Joi.any())
                     .required()
                 })
               )
@@ -84,4 +86,4 @@ const MethodCallSchema = Joi.object({
     .required()
 });
 
-module.exports = MethodCallSchema;
+module.exports.XMLRPCSchema = XMLRPCSchema;
