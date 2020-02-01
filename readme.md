@@ -3,7 +3,7 @@
 ## How to use
 
 ```js
-const { XMLRPCClient } = require('xml-rpc-client');
+const { XMLRPCClient } = require('@timdurward/xml-rpc-client');
 
 // Build XML-RPC client with options.
 const opts = {
