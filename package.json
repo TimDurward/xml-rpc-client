@@ -1,5 +1,5 @@
 {
-  "name": "xml-rpc-client",
+  "name": "@timdurward/xml-rpc-client",
   "version": "1.0.0",
   "description": "Tiny NodeJS XML-RPC Client.",
   "main": "index.js",
