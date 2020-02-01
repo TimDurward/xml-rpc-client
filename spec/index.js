@@ -3,6 +3,47 @@ const Joi = require('@hapi/joi');
 // Referenced from official xml-rpc docs: http://xmlrpc.com/spec.md
 
 /**
+ * Scalar Types Specifications
+ * http://xmlrpc.com/spec.md#a-namescalarsscalar-valuesa
+ *
+ */
+
+// Four-byte signed integer
+const FourByteIntScalarTypeSchema = Joi.object({
+  i4: Joi.number()
+});
+
+// Integer
+const IntScalarTypeSchema = Joi.object({
+  int: Joi.number()
+});
+
+// Boolean  (0: False / 1: True)
+const BooleanScalarTypeSchema = Joi.object({
+  boolean: Joi.bool()
+});
+
+// String
+const StringScalarTypeSchema = Joi.object({
+  string: Joi.string()
+});
+
+// Double-precision signed floating point number
+const DoubleFloatingPointScalarTypeSchema = Joi.object({
+  double: Joi.number()
+});
+
+// Date/Time (19980717T14:08:55)
+const DateTimeISO8601ScalarTypeSchema = Joi.object({
+  'dateTime.iso8601': Joi.date()
+});
+
+// Base64-encoded binary (eW91IGNhbid0IHJlYWQgdGhpcyE=)
+const Base64ScalarTypeSchema = Joi.object({
+  base64: Joi.binary()
+});
+
+/**
  * Struct Type Specification
  * http://xmlrpc.com/spec.md#structs
  *
@@ -17,7 +58,17 @@ const StructTypeSchema = Joi.object({
         .items(
           Joi.object({
             name: Joi.string().required(),
-            value: Joi.array().required()
+            value: Joi.array()
+              .items(
+                FourByteIntScalarTypeSchema,
+                IntScalarTypeSchema,
+                BooleanScalarTypeSchema,
+                StringScalarTypeSchema,
+                DoubleFloatingPointScalarTypeSchema,
+                DateTimeISO8601ScalarTypeSchema,
+                Base64ScalarTypeSchema
+              )
+              .required()
           })
         )
         .required()
@@ -38,7 +89,17 @@ const ArrayTypeSchema = Joi.object({
       data: Joi.array()
         .items(
           Joi.object({
-            value: Joi.array().required()
+            value: Joi.array()
+              .items(
+                FourByteIntScalarTypeSchema,
+                IntScalarTypeSchema,
+                BooleanScalarTypeSchema,
+                StringScalarTypeSchema,
+                DoubleFloatingPointScalarTypeSchema,
+                DateTimeISO8601ScalarTypeSchema,
+                Base64ScalarTypeSchema
+              )
+              .required()
           })
         )
         .required()
@@ -72,9 +133,17 @@ const XMLRPCSchema = Joi.object({
               .items(
                 Joi.object({
                   value: Joi.array()
-                  // replace Joi.any() with valid Scalar types
-                  // http://xmlrpc.com/spec.md#a-namescalarsscalar-valuesa
-                    .items(StructTypeSchema, ArrayTypeSchema, Joi.any())
+                    .items(
+                      StructTypeSchema,
+                      ArrayTypeSchema,
+                      FourByteIntScalarTypeSchema,
+                      IntScalarTypeSchema,
+                      BooleanScalarTypeSchema,
+                      StringScalarTypeSchema,
+                      DoubleFloatingPointScalarTypeSchema,
+                      DateTimeISO8601ScalarTypeSchema,
+                      Base64ScalarTypeSchema
+                    )
                     .required()
                 })
               )
